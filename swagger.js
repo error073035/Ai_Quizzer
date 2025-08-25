@@ -11,7 +11,9 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:5000/api/v1",
+        url: process.env.VERCEL_URL
+          ? `https://${process.env.VERCEL_URL}/api/v1`
+          : "http://localhost:5000/api/v1",
       },
     ],
     components: {
@@ -23,11 +25,7 @@ const options = {
         },
       },
     },
-    security: [
-      {
-        bearerAuth: [],
-      },
-    ],
+    security: [{ bearerAuth: [] }],
   },
   apis: ["./routes/*.js"],
 };
@@ -36,7 +34,12 @@ const swaggerSpec = swaggerJsDoc(options);
 
 function swaggerDocs(app) {
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-  console.log("Swagger Docs available at http://localhost:5000/api-docs");
+
+  const url = process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}/api-docs`
+    : "http://localhost:5000/api-docs";
+
+  console.log(`Swagger Docs available at: ${url}`);
 }
 
 module.exports = swaggerDocs;
