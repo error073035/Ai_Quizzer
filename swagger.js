@@ -1,5 +1,4 @@
 const swaggerJsDoc = require("swagger-jsdoc");
-const swaggerUi = require("swagger-ui-express");
 
 const options = {
   definition: {
@@ -33,7 +32,42 @@ const options = {
 const swaggerSpec = swaggerJsDoc(options);
 
 function swaggerDocs(app) {
-  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+  // Serve the raw JSON spec
+  app.get("/swagger.json", (req, res) => {
+    res.setHeader("Content-Type", "application/json");
+    res.send(swaggerSpec);
+  });
+
+  // Serve Swagger UI using CDN
+  app.get("/api-docs", (req, res) => {
+    res.send(`
+      <!DOCTYPE html>
+      <html lang="en">
+        <head>
+          <meta charset="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <title>Swagger Docs</title>
+          <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://unpkg.com/swagger-ui-dist/swagger-ui.css"
+          />
+        </head>
+        <body>
+          <div id="swagger-ui"></div>
+          <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js"></script>
+          <script>
+            window.onload = () => {
+              SwaggerUIBundle({
+                url: '/swagger.json',
+                dom_id: '#swagger-ui',
+              });
+            };
+          </script>
+        </body>
+      </html>
+    `);
+  });
 
   const url = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}/api-docs`
