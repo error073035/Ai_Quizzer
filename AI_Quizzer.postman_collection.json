@@ -19,7 +19,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"kahanhirani\",\r\n    \"password\": \"kahanhirani123\",\r\n    \"email\": \"kahanhirani073@gmail.com\"\r\n}",
+							"raw": "{\r\n    \"username\": \"kahanhirani\",\r\n    \"password\": \"kahanhirani123\",\r\n    \"email\": \"kahan@gmail.com\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
